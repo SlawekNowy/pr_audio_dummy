@@ -13,3 +13,7 @@ link_generic_module_libraries()
 register_pragma_module(${PROJ_NAME})
 
 add_dependencies(${PROJ_NAME} alsoundsystem)
+
+set_target_properties(pr_audio_dummy PROPERTIES FOLDER modules/audio)
+
+set_property(GLOBAL PROPERTY PRAGMA_MODULE_SKIP_TARGET_PROPERTY_FOLDER 1)
