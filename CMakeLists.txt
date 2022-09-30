@@ -12,7 +12,7 @@ link_external_library(alsoundsystem)
 link_generic_module_libraries()
 register_pragma_module(${PROJ_NAME})
 
-add_dependencies(${PROJ_NAME} alsoundsystem)
+add_dependencies(${PROJ_NAME} alsoundsystem shared ishared)
 
 set_target_properties(pr_audio_dummy PROPERTIES FOLDER modules/audio)
 
