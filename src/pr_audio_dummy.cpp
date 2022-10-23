@@ -9,6 +9,12 @@
 #include <alsound_listener.hpp>
 #include <sharedutils/util_pragma.hpp>
 
+
+#ifdef __linux__
+#define DLLEXPORT __attribute__((visibility("default")))
+#else
+#define DLLEXPORT __declspec(dllexport)
+#endif
 namespace al
 {
 	class DummySoundSystem
@@ -227,7 +233,7 @@ std::unique_ptr<al::IListener> al::DummySoundSystem::CreateListener()
 
 extern "C"
 {
-	__declspec(dllexport) bool initialize_audio_api(float metersPerUnit,std::shared_ptr<al::ISoundSystem> &outSoundSystem,std::string &errMsg)
+    DLLEXPORT bool initialize_audio_api(float metersPerUnit,std::shared_ptr<al::ISoundSystem> &outSoundSystem,std::string &errMsg)
 	{
 		outSoundSystem = std::shared_ptr<al::DummySoundSystem>(new al::DummySoundSystem{metersPerUnit},[](al::DummySoundSystem *sys) {
 			sys->OnRelease();

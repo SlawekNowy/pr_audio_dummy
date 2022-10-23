@@ -1,3 +1,3 @@
 pragma_install_create_directory(modules/audio)
 pragma_install_create_directory(modules/audio/dummy)
-pragma_install_lib("${CMAKE_CURRENT_BINARY_DIR}/modules/pr_audio_dummy/${CONFIG_BUILD_TYPE}/pr_audio_dummy${OS_LIB_BIN_EXT}" "modules/audio/dummy/" OPTIONAL)
+pragma_install_lib("${CMAKE_CURRENT_BINARY_DIR}/modules/pr_audio_dummy/${PR_MODULE_INSTALL_SUBDIR}/${OS_LIB_BIN_PRE}pr_audio_dummy${OS_LIB_BIN_EXT}" "modules/audio/dummy/" OPTIONAL)
