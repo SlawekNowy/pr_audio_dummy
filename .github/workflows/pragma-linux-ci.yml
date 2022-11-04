@@ -1,0 +1,68 @@
+name: Build Linux
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+concurrency:
+  group: environment-lin-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build - ${{ matrix.config.os }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - os: ubuntu-22.04
+            name: "Ubuntu GCC-11"
+            artifact: "ubuntu_gcc.7z"
+            build_type: "RelWithDebInfo"
+            cc: "clang-14"
+            cxx: "clang++-14"
+            archiver: "7z a"
+            generators: "Unix Makefiles"
+            build_dir: 'build'
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+          
+      - name: Setup Pragma Module
+        id: pragma-cmake-defs
+        uses: Silverlan/common_actions/setup_pragma_module@main
+        with:
+          cc_version: ${{ matrix.cc }}
+          cxx_version: ${{ matrix.cxx }}
+
+      - name: Get alsoundsystem binaries
+        shell: bash
+        run: |
+          wget https://github.com/Silverlan/tmp_alsoundsystem_ci/releases/download/latest/binaries_linux64.tar.gz
+          tar xvfz binaries_linux64.tar.gz
+          rm -f binaries_linux64.tar.gz
+
+      - name: Build
+        shell: bash
+        run: |
+          cmake -G "Unix Makefiles" \
+            ${{ steps.pragma-cmake-defs.outputs.cmake_defs }} -DDEPENDENCY_ALSOUNDSYSTEM_LIBRARY="./lib/libalsoundsystem.so"
+          cmake --build ./ --verbose --target pr_audio_dummy
+
+      - name: Create Release Files
+        shell: bash
+        run: |
+          mkdir release
+          mkdir release/modules
+          mkdir release/modules/audio
+          mkdir release/modules/audio/dummy
+          rsync --mkpath ./libpr_audio_dummy.so release/modules/audio/dummy/
+          
+      - name: Release Binaries
+        uses: Silverlan/common_actions/release_nightly_binaries@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit: ${{ github.ref_name }}
