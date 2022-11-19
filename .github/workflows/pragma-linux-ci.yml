@@ -41,7 +41,7 @@ jobs:
       - name: Get alsoundsystem binaries
         shell: bash
         run: |
-          wget https://github.com/Silverlan/tmp_alsoundsystem_ci/releases/download/latest/binaries_linux64.tar.gz
+          wget https://github.com/Silverlan/alsoundsystem/releases/download/latest/binaries_linux64.tar.gz
           tar xvfz binaries_linux64.tar.gz
           rm -f binaries_linux64.tar.gz
 
