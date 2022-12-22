@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-include("../CMakeShared.txt")
+include("./CMakeShared.txt")
 
 set(PROJ_NAME pr_audio_dummy)
 
@@ -12,7 +12,7 @@ link_external_library(alsoundsystem)
 link_generic_module_libraries()
 register_pragma_module(${PROJ_NAME})
 
-add_dependencies(${PROJ_NAME} alsoundsystem shared ishared)
+# add_dependencies(${PROJ_NAME} alsoundsystem shared ishared)
 
 set_target_properties(pr_audio_dummy PROPERTIES FOLDER modules/audio)
 
